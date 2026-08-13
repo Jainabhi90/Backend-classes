@@ -38,15 +38,18 @@
 
 
 
-// creating server from exoress
+// creating server from express
 
 const express = require('express');
 
 const app = express();
-
 app.get('/',(req,res)=>{
     res.send("hi i am from /home")
 })
+app.post('/data',(req,res)=>{
+    res.send("hello data from server")
+})
+
 app.get('/about',(req,res)=>{
     res.send("hi i am from /about")
 })
@@ -62,7 +65,7 @@ app.get('contact',(req,res)=>{
     res.send("hi i am from /contact")
 })
 
-app.listen(1234,()=>{
+app.listen(3000,()=>{
     console.log("server runing...");
     
 })
