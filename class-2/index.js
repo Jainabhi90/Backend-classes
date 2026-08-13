@@ -14,6 +14,15 @@
 let http = require("http")
 
 let server =  http.createServer((req,res)=>{
+        console.log(req.url,"hehe");
+        // res.write("hii       ")
+
+        if(req.url == '/'){
+            res.write("from home / ")
+        }
+        else if(req.url == '/about'){
+            res.write("from /about  ")
+        }
         res.end("helloo")
         
         
