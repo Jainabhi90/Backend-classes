@@ -50,8 +50,12 @@ app.get('/',(req,res)=>{
 app.get('/about',(req,res)=>{
     res.send("hi i am from /about")
 })
-app.use(()=>{
-    console.log("hehehhe");
+app.use((req,res,next)=>{
+    console.log("me thoda sa janedunga ");
+    next()
+})
+app.use((req,res)=>{
+    console.log("me to bilkul hi nahi janedungaa.");
     
 })
 app.get('contact',(req,res)=>{
