@@ -14,4 +14,11 @@ app.get('/search',(req,res)=>{
     
     res.send("hello")
 })
-app.listen(3000)
+app.post('/data',(req,res)=>{
+    console.log(req.body);
+    
+    res.send("helllloooo")
+})
+app.listen(3000,()=>[
+    console.log("Server is runnnnnnninggggg")
+])
