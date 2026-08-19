@@ -107,6 +107,18 @@ app.put('/student/:id',(req,res)=>{
     console.log(data);
     
 })
+app.delete('/student/:id',(req,res)=>{
+    let {id} = req.params
+    let obj = students.filter((a)=>{
+        return a.id != Number(id)
+    })
+    students = obj
+    res.json({
+        msg : "deleted"
+    })
+    console.log(students);
+    
+})
 
 app.listen(4000,()=>{
     console.log("server runnnnn..");
