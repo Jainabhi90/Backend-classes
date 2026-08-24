@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Frontend build output
+frontend/dist/
+dist/
+
+# Environment and logs
+.env
+.env.*
+*.log
+
+# macOS and editor files
+.DS_Store
+.vscode/
+.idea/
