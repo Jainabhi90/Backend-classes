@@ -8,8 +8,15 @@ mongoose.connect("mongodb://127.0.0.1:27017/db").then(()=>{
     console.log("db..");
     
 })
+const cors = require("cors");
+app.use(cors());
 
-app.post("/singUp",async(req,res)=>{
+app.get("/", async (req, res) => {
+    const users = await User.find({}, { pass: 0 });
+    res.json(users);
+});
+
+app.post("/signUp",async(req,res)=>{
     let {name,email,pass}=req.body
     let findData = await User.findOne({email})
     console.log(findData,"hehheheh");
@@ -35,9 +42,9 @@ app.post("/login",async(req,res)=>{
     console.log(findData,"hehheheh");
 
     if(findData){
-        let updateddp = await bcryptjs.hash(pass,12)
-        if(bcryptjs.compare(pass , updateddp )==true){
-            return res.send("user match showing the data ")
+        let isMatch = await bcryptjs.compare(pass, findData.pass)
+        if(isMatch){
+            return res.json({name: findData.name, email: findData.email})
         }
         return res.send("pass didnt match")
     }else{
@@ -45,7 +52,6 @@ app.post("/login",async(req,res)=>{
     }
     
 })
-
 
 
 app.listen(3000,()=>{
