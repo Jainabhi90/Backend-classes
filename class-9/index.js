@@ -107,47 +107,98 @@ app.get("/admin",auth,roleCheck("admin"),(req,res)=>{
     })
 })
 
-app.get("/me",(req,res)=>{
-    let token = req.headers.authorization;
-    if(!token){
-            return res.json("Kaun hai app..")
-    }
-    let decode = JWT.verify(token,"heheheheee")
-        console.log(decode,"isse");
-        req.user = decode;
-    res.json({
-        name : req.user.name,
-        email : req.user.email,
-        role : req.user.role
-    })
-})
-app.put("/me",async(req,res)=>{
-    let change = req.body;
-    let token = req.headers.authorization;
-    if(!token){
-            return res.json("Kaun hai app..")
-    }
-    let decode = JWT.verify(token,"heheheheee")
-        console.log(decode,"isse");
-        req.user = decode;
+// app.get("/me",(req,res)=>{
+//     let token = req.headers.authorization;
+//     if(!token){
+//             return res.json("Kaun hai app..")
+//     }
+//     let decode = JWT.verify(token,"heheheheee")
+//         console.log(decode,"isse");
+//         req.user = decode;
+//     res.json({
+//         name : req.user.name,
+//         email : req.user.email,
+//         role : req.user.role
+//     })
+// })
+
+ 
+
+// app.put("/me",async(req,res)=>{
+//     let change = req.body;
+//     console.log(change);
+    
+//     let token = req.headers.authorization;
+//     if(!token){
+//             return res.json("Kaun hai app..")
+//     }
+//     let decode = JWT.verify(token,"heheheheee")
+//         console.log(decode,"isse");
+//         req.user = decode;
 
 
-    let email = req.user.email;
-    console.log(email);
-      console.log(req.user.email,"byeeeee");
+//     let email = req.user.email;
+//     console.log(email);
+//       console.log(req.user.email,"byeeeee");
       
-    let findData = await User.findOne({email:email});
-        console.log(findData,"1st");
+//     let findData = await User.findOne({email:email});
+//         console.log(findData,"1st");
         
-        if(findData){
-            req.user.name=change;
-            res.json({mas:"done",findData})
-           console.log(findData);
-        }
-        res.json({
-            msg: "kuch to gardbard hai "
-        })
+//         if(findData){
+//             findData.name=change.name;
+//             res.json({mas:"done",findData})
+//            console.log(findData);
+//         }
+//         res.json({
+//             msg: "kuch to gardbard hai "
+//         })
+// })
+app.get('/me',auth,(req,res)=>{
+   let change = {
+      name :req.user.name,
+      email:req.user.email,
+      role:req.user.role,
+   }
+      res.json(change);
 })
+app.put('/me',auth,async(req,res)=>{
+   let emaill = req.user.email;
+   let findData = await User.findOneAndUpdate({emaill},{name:req.body.name}).select("-pass");
+   res.send(findData)
+})
+
+app.patch('/users/:id/role',auth,roleCheck("admin"),async(req,res)=>{
+   let {role} = req.body
+   let findData = await User.findByIdAndUpdate(
+      req.params.id,
+      {role:role}
+   ).select("-pass")
+   res.json(findData)
+})
+
+app.post('/orders',auth,async(req,res)=>{
+   let {productName,amount} = req.body
+
+   let data = new Order({
+      productName:productName,
+      amount:amount,
+      userId:req.user.id
+
+   })
+
+   await data.save()
+
+   res.json(data)
+
+})
+app.get('/my-orders',auth,async(req,res)=>{
+
+   let data = await Order.find({userId:req.user.id })
+
+   res.json(data)
+
+})
+
 
 app.listen(3000,()=>{
     console.log("server..");
